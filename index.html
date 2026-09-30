@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDGAME - O Melhor em Games</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png">
+</head>
+<body>
+    <!-- Header Dinâmico -->
+    <header class="header" id="header">
+        <div class="header-wrapper">
+            <div class="container-fluid">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <a href="#home" class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+                            <img src="logo-rdgame.png" alt="RDGAME" class="logo-image">
+                        </a>
+                    </div>
+
+                    <nav class="nav-desktop">
+                        <a href="index.html" class="nav-link active">Home</a>
+                        <a href="consoles.html" class="nav-link">Consoles</a>
+                        <a href="jogos.html" class="nav-link">Jogos</a>
+                        <a href="acessorios.html" class="nav-link">Acessórios</a>
+                        <a href="manuais-posters.html" class="nav-link">Manuais e Posters</a>
+                        <a href="raridades.html" class="nav-link">Raridades</a>
+                    </nav>
+
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+                            <button class="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <button class="icon-btn" id="wishlistBtn" title="Favoritos">
+                            <i class="fas fa-heart"></i>
+                            <span class="badge" id="wishlistCount">0</span>
+                        </button>
+                        <button class="icon-btn" id="cartBtn" title="Carrinho">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" id="cartCount">0</span>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <nav class="nav-mobile" id="navMobile">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="consoles.html" class="nav-link">Consoles</a>
+            <a href="jogos.html" class="nav-link">Jogos</a>
+            <a href="acessorios.html" class="nav-link">Acessórios</a>
+            <a href="manuais-posters.html" class="nav-link">Manuais e Posters</a>
+            <a href="raridades.html" class="nav-link">Raridades</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h4 class="hero-title">Bem-vindo a RDGAME</h4>
+            <p class="hero-subtitle">Descubra os melhores produtos para gamers apaixonados</p>
+            <button class="btn btn-primary btn-lg" onclick="document.getElementById('produtos').scrollIntoView({behavior: 'smooth'})">
+                Explorar Produtos
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="hero-background"></div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section featured-section" id="produtos">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h2 class="section-title">Produtos em Destaque</h2>
+                <p class="section-subtitle">Seleção premium dos melhores itens</p>
+            </div>
+            <div class="products-grid" id="featuredProducts"></div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section categories-section" id="categorias">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h2 class="section-title">Categorias</h2>
+                <p class="section-subtitle">Encontre o que você procura</p>
+            </div>
+            <div class="categories-grid">
+                <a href="consoles.html" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Consoles/Portáteis</h3>
+                    <p>PlayStation, Xbox, Nintendo</p>
+                </a>
+                <a href="jogos.html" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3>Jogos</h3>
+                    <p>Exclusivos e clássicos</p>
+                </a>
+                <a href="acessorios.html" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3>Acessórios</h3>
+                    <p>Controles e periféricos</p>
+                </a>
+                <a href="novidades.html" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Novidades</h3>
+                    <p>Lançamentos da semana</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    <section class="section all-products-section" id="todos-produtos">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h2 class="section-title">Todos os Produtos</h2>
+                <p class="section-subtitle">Navegue por nossa coleção completa</p>
+            </div>
+
+            <div class="products-container">
+                <aside class="filters-panel">
+                    <div class="filter-header">
+                        <h3>Filtros</h3>
+                        <button class="btn-reset" onclick="resetFilters()">Limpar</button>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Categoria</h4>
+                        <div class="filter-options">
+                            <label class="filter-checkbox">
+                                <input type="checkbox" class="filter-input" value="console">
+                                <span>Consoles</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" class="filter-input" value="game">
+                                <span>Jogos</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" class="filter-input" value="accessory">
+                                <span>Acessórios</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Preço</h4>
+                        <div class="price-slider">
+                            <input type="range" id="priceRange" min="0" max="5000" value="5000">
+                            <div class="price-display">
+                                <span>Até R$</span>
+                                <strong id="priceValue">5000</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Ordenar</h4>
+                        <select id="sortSelect" class="select-input">
+                            <option value="newest">Mais Recentes</option>
+                            <option value="price-asc">Menor Preço</option>
+                            <option value="price-desc">Maior Preço</option>
+                            <option value="name">Nome (A-Z)</option>
+                        </select>
+                    </div>
+                </aside>
+
+                <div class="products-main">
+                    <div class="products-grid" id="allProducts"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section (Customize Background Image) -->
+    <section class="section newsletter-section" id="sell-section" style="background-image: url('banner-contato.jpg');">
+        <div class="container-fluid">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h2>Quer Vender Seus Jogos ou Consoles?</h2>
+                    <p>Entre em contato conosco! Venda seus produtos com a gente.</p>
+                </div>
+                <button class="btn-whatsapp" onclick="contactWhatsApp()">
+                    <i class="fab fa-whatsapp"></i>
+                    Fale Conosco
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>RDGAME</h4>
+                    <p>O melhor em produtos para gamers apaixonados</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/rdgame78/" class="social-link"><i class="fab fa-instagram"></i></a>
+
+                        <a href="https://www.youtube.com/@rdgame78" class="social-link"><i class="fab fa-youtube"></i></a>
+                        
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+<li><a href="consoles.html">Consoles</a></li>
+<li><a href="jogos.html">Jogos</a></li>
+<li><a href="acessorios.html">Acessórios</a></li>
+<li><a href="novidades.html">Novidades</a></li>
+<li><a href="contato.html">Contato</a></li>
+
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <p>Email: rd78netgamesrio@gmail.com</p>
+                    <p>Telefone: (21) 98355-8012</p>
+                    <p>Rio de Janeiro, RJ</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Atendimento</h4>
+                    <p>Segunda a Sexta: 9h às 18h</p>
+                    <p>Sábado: 9h às 17h na Feira da Praça XV - Centro RJ</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RDGAME. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/5521983558012" class="whatsapp-btn" target="_blank" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <style>
+        .admin-link {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: #0066cc;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 999;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .admin-link:hover {
+            background: #0052a3;
+            transform: scale(1.05);
+        }
+    </style>
+
+    <!-- Modals -->
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Carrinho de Compras</h2>
+                <button class="btn-close" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="cartItems"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <strong>R$ <span id="cartTotal">0.00</span></strong>
+                </div>
+                <button class="btn btn-primary" onclick="checkout()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="modal" id="wishlistModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Meus favoritos</h2>
+                <button class="btn-close" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="wishlistItems"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content modal-large">
+            <button class="btn-close" onclick="closeModal('productModal')"><i class="fas fa-times"></i></button>
+            <div class="product-detail">
+                <div class="product-image-container">
+    <div class="image-carousel">
+        <button class="carousel-btn carousel-prev" onclick="changeImage(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <img id="modalProductImage" src="" alt="" class="carousel-main-image">
+        <button class="carousel-btn carousel-next" onclick="changeImage(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    <div class="carousel-thumbnails" id="carouselThumbnails"></div>
+</div>
+
+                <div class="product-info">
+                    <h2 id="modalProductName"></h2>
+                    <p id="modalProductCategory" class="product-category"></p>
+                    <div class="product-rating">
+                        <div class="stars" id="modalProductStars"></div>
+                        <span id="modalProductReviews"></span>
+                    </div>
+                    <div class="product-price">
+                        <p class="price" id="modalProductPrice"></p>
+                        <p class="original-price" id="modalProductOriginalPrice"></p>
+                    </div>
+                    <p id="modalProductDescription" class="product-description"></p>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-lg" id="modalAddToCart">Adicionar ao Carrinho</button>
+                        <button class="btn btn-secondary" id="modalAddToWishlist">
+                            <i class="far fa-heart"></i> Favoritos
+                        </button>
+                    </div>
+                    <div class="product-specs">
+                        <h3>Informações</h3>
+                        <ul>
+                            <li><strong>Disponibilidade:</strong> <span id="modalProductStock">Em Estoque</span></li>
+                            <li><strong>SKU:</strong> <span id="modalProductSKU">RDG-001</span></li>
+                            <li><strong>Categoria:</strong> <span id="modalProductCategoryDetail">Console</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

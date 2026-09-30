@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - RD GAME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Mercado Pago SDK -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        /* Checkout Specific Styles */
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .checkout-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .checkout-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkout-section h2 i {
+            color: #3b5bdb;
+        }
+
+        /* Order Summary */
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .order-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .order-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .order-item-quantity {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: #3b5bdb;
+            font-size: 1.1rem;
+        }
+
+        /* Order Summary Box */
+        .order-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 1rem;
+            border-top: 2px solid #e9ecef;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #3b5bdb;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Payment Options */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-option:hover {
+            border-color: #3b5bdb;
+            box-shadow: 0 4px 12px rgba(59, 91, 219, 0.1);
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #3b5bdb;
+        }
+
+        .payment-option-content {
+            flex: 1;
+        }
+
+        .payment-option-title {
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-option-description {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .payment-option-icon {
+            font-size: 1.5rem;
+            color: #3b5bdb;
+        }
+
+        /* Pickup Info */
+        .pickup-info {
+            background: #f0f7ff;
+            border-left: 4px solid #3b5bdb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pickup-info h3 {
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pickup-info h3 i {
+            color: #3b5bdb;
+        }
+
+        .pickup-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .pickup-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .pickup-detail i {
+            color: #3b5bdb;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .pickup-detail-content {
+            flex: 1;
+        }
+
+        .pickup-detail-label {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .pickup-detail-value {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Action Buttons */
+        .checkout-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-checkout {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-checkout:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-payment {
+            background: #3b5bdb;
+            color: white;
+        }
+
+        .btn-payment:hover:not(:disabled) {
+            background: #2d42a8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 91, 219, 0.3);
+        }
+
+        .btn-whatsapp-checkout {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp-checkout:hover:not(:disabled) {
+            background: #1fa854;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-back {
+            background: #e9ecef;
+            color: #1a1a1a;
+            margin-top: 1rem;
+        }
+
+        .btn-back:hover {
+            background: #dee2e6;
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart h2 {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-cart p {
+            color: #999;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-section {
+                padding: 1.5rem;
+            }
+
+            .order-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .order-item-image {
+                width: 100%;
+                height: 150px;
+            }
+
+            .payment-option {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .payment-option input[type="radio"] {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-wrapper">
+            <div class="container-fluid">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <a href="index.html" class="logo">
+                            <img src="logo-rdgame.png" alt="RD GAME" class="logo-image">
+                        </a>
+                    </div>
+
+                    <nav class="nav-desktop">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="consoles.html" class="nav-link">Consoles</a>
+                        <a href="jogos.html" class="nav-link">Jogos</a>
+                        <a href="acessorios.html" class="nav-link">Acessórios</a>
+                        <a href="novidades.html" class="nav-link">Novidades</a>
+                        <a href="contato.html" class="nav-link">Contato</a>
+                    </nav>
+
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+                            <button class="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <button class="icon-btn" id="wishlistBtn" title="Wishlist">
+                            <i class="fas fa-heart"></i>
+                            <span class="badge" id="wishlistCount">0</span>
+                        </button>
+                        <button class="icon-btn" id="cartBtn" title="Carrinho">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" id="cartCount">0</span>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav class="nav-mobile" id="navMobile">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="consoles.html" class="nav-link">Consoles</a>
+        <a href="jogos.html" class="nav-link">Jogos</a>
+        <a href="acessorios.html" class="nav-link">Acessórios</a>
+        <a href="novidades.html" class="nav-link">Novidades</a>
+        <a href="contato.html" class="nav-link">Contato</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <section class="section" style="padding-top: 120px;">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h2 class="section-title">Finalizar Compra</h2>
+                    <p class="section-subtitle">Revise seu pedido e escolha a forma de pagamento</p>
+                </div>
+
+                <div class="checkout-container" id="checkoutContainer">
+                    <!-- Left: Order Summary -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-shopping-cart"></i> Resumo do Pedido</h2>
+                        <div class="order-items" id="orderItems"></div>
+                        <div class="order-summary">
+                            <div class="summary-row">
+                                <span class="summary-label">Subtotal:</span>
+                                <span class="summary-value" id="subtotal">R$ 0,00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Frete:</span>
+                                <span class="summary-value" id="shipping">R$ 0,00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Total:</span>
+                                <span class="summary-value" id="total">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Payment Options -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-credit-card"></i> Forma de Pagamento</h2>
+                        
+                        <div class="payment-options">
+                            <!-- Option 1: Online Payment -->
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="online" id="paymentOnline">
+                                <div class="payment-option-content">
+                                    <div class="payment-option-title">💳 Pagar Online</div>
+                                    <div class="payment-option-description">Cartão de crédito ou Pix</div>
+                                </div>
+                            </label>
+
+                            <!-- Option 2: Pickup -->
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="pickup" id="paymentPickup" checked>
+                                <div class="payment-option-content">
+                                    <div class="payment-option-title">📍 Retirar no Local</div>
+                                    <div class="payment-option-description">Sem frete - Sábado 9h às 17h</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Payment Method Selector -->
+                        <div id="paymentMethodSelector" style="display: none; margin-top: 2rem; margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; cursor: pointer;">
+                                <input type="radio" name="paymentMethod" value="card" id="paymentMethodCard" checked>
+                                <span style="font-weight: 600;">💳 Cartão de Crédito</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 1rem; cursor: pointer;">
+                                <input type="radio" name="paymentMethod" value="pix" id="paymentMethodPix">
+                                <span style="font-weight: 600;">📱 PIX</span>
+                            </label>
+                        </div>
+
+                        <!-- Card Payment Form -->
+                        <div id="cardFormContainer" style="display: none; margin-top: 2rem;">
+                            <h3 style="margin-bottom: 1.5rem; color: #1a1a1a;">Dados do Cartao</h3>
+                            <form id="paymentForm">
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nome do Titular</label>
+                                    <input type="text" id="cardholderName" placeholder="Joao Silva" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Numero do Cartao</label>
+                                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Validade (MM/AA)</label>
+                                        <input type="text" id="cardExpiry" placeholder="12/25" maxlength="5" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    </div                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">CVV</label>
+                                    <input type="text" id="cardCVV" placeholder="123" maxlength="4" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+
+                                <!-- CPF -->
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">CPF</label>
+                                    <input type="text" id="cardholderCPF" placeholder="123.456.789-00" maxlength="14" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+
+                                <!-- Installments -->
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Parcelamento</label>
+                                    <select id="installments" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                        <option value="1">1x - A vista</option>
+                                        <option value="2">2x - Sem juros</option>
+                                        <option value="3">3x - Sem juros</option>
+                                        <option value="6">6x - Sem juros</option>
+                                        <option value="12">12x - Com juros</option>
+                                    </select>
+                                </div>
+
+                                <!-- Billing Address -->
+                                <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a1a; font-weight: 600;">Endereco de Cobranca</h4>
+
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Rua</label>
+                                    <input type="text" id="billingStreet" placeholder="Rua das Flores" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Numero</label>
+                                        <input type="text" id="billingNumber" placeholder="123" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Complemento</label>
+                                        <input type="text" id="billingComplement" placeholder="Apto 101" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Bairro</label>
+                                    <input type="text" id="billingNeighborhood" placeholder="Centro" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cidade</label>
+                                        <input type="text" id="billingCity" placeholder="Rio de Janeiro" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">UF</label>
+                                        <input type="text" id="billingState" placeholder="RJ" maxlength="2" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">CEP</label>
+                                    <input type="text" id="billingZipCode" placeholder="20010-010" maxlength="9" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+                            </form>
+                        </div>                      </div>
+
+                        <!-- PIX Payment Form -->
+                        <div id="pixFormContainer" style="display: none; margin-top: 2rem;">
+                            <h3 style="margin-bottom: 1.5rem; color: #1a1a1a;">Pagamento por PIX</h3>
+                            <div style="background: #f0f7ff; border: 2px solid #3b5bdb; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                                <div style="margin-bottom: 1rem;">
+                                    <p style="color: #666; margin-bottom: 1rem;">Escaneie o QR Code abaixo ou copie a chave PIX</p>
+                                    <div id="pixQRCode" style="background: white; padding: 1rem; border-radius: 8px; display: inline-block;">
+                                        <img src="https://via.placeholder.com/200?text=QR+Code" alt="QR Code PIX" style="width: 200px; height: 200px;">
+                                    </div>
+                                </div>
+                                <div style="margin-top: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Chave PIX (Copia e Cola)</label>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <input type="text" id="pixKey" value="00020126580014br.gov.bcb.pix" readonly style="flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; background: #fff;">
+                                        <button type="button" onclick="copyPixKey()" style="padding: 0.75rem 1.5rem; background: #3b5bdb; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Copiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="margin-top: 1rem; color: #666; font-size: 0.875rem;">Apos realizar a transferencia, clique em "Confirmar Pagamento"</p>
+                        </div>
+
+                        <!-- Pickup Info -->
+                        <div class="pickup-info">
+                            <h3><i class="fas fa-map-marker-alt"></i> Local de Retirada</h3>
+                            <div class="pickup-detail">
+                                <i class="fas fa-location-dot"></i>
+                                <div class="pickup-detail-content">
+                                    <div class="pickup-detail-label">Endereço</div>
+                                    <div class="pickup-detail-value">Praça Quinze de Novembro<br>Rio de Janeiro, RJ - 20010-010</div>
+                                </div>
+                            </div>
+                            <div class="pickup-detail">
+                                <i class="fas fa-clock"></i>
+                                <div class="pickup-detail-content">
+                                    <div class="pickup-detail-label">Horário</div>
+                                    <div class="pickup-detail-value">Sábado: 9h às 15h</div>
+                                </div>
+                            </div>
+                            <div class="pickup-detail">
+                                <i class="fas fa-info-circle"></i>
+                                <div class="pickup-detail-content">
+                                    <div class="pickup-detail-label">Observação</div>
+                                    <div class="pickup-detail-value">Confirme sua retirada por WhatsApp</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="checkout-actions">
+                            <button class="btn-checkout btn-payment" id="btnPayOnline" onclick="payOnline()">
+                                <i class="fas fa-credit-card"></i> Pagar Online
+                            </button>
+                            <button class="btn-checkout btn-whatsapp-checkout" id="btnPickup" onclick="pickupWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> Confirmar Retirada
+                            </button>
+                            <a href="index.html" class="btn-checkout btn-back">
+                                <i class="fas fa-arrow-left"></i> Continuar Comprando
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Cart Message -->
+                <div class="empty-cart" id="emptyCart" style="display: none;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Carrinho Vazio</h2>
+                    <p>Adicione produtos ao seu carrinho para continuar</p>
+                    <a href="index.html" class="btn btn-primary">Voltar para Produtos</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>RDGAME</h4>
+                    <p>O melhor em produtos para gamers apaixonados</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/rdgame78/" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@rdgame78" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="consoles.html">Consoles</a></li>
+                        <li><a href="jogos.html">Jogos</a></li>
+                        <li><a href="acessorios.html">Acessórios</a></li>
+                        <li><a href="novidades.html">Novidades</a></li>
+                        <li><a href="contato.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <p>Email: rd78netgamesrio@gmail.com</p>
+                    <p>Telefone: (21) 98355-8012</p>
+                    <p>Rio de Janeiro, RJ</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Atendimento</h4>
+                    <p>Segunda a Sexta: 9h às 18h</p>
+                    <p>Sábado: 9h às 15h</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RDGAME. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/55" class="whatsapp-btn" target="_blank" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Meu Carrinho</h2>
+                <button class="btn-close" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="cartItems"></div>
+            <div class="modal-footer">
+                <div class="cart-total">
+                    Subtotal: <strong id="subtotal">R$ 0,00</strong><br>
+                    Frete: <strong id="shipping">R$ 0,00</strong><br>
+                    Total: <strong id="total">R$ 0,00</strong>
+                </div>
+                <button class="btn btn-primary" onclick="checkout()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="modal" id="wishlistModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Meus Favoritos</h2>
+                <button class="btn-close" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="wishlistItems"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', () => {
+            setupHeaderScroll();
+            updateCartCount();
+            updateWishlistCount();
+            renderCheckout();
+            setupPaymentOptions();
+        });
+
+        // Render checkout page
+        function renderCheckout() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const checkoutContainer = document.getElementById('checkoutContainer');
+            const emptyCart = document.getElementById('emptyCart');
+            const orderItems = document.getElementById('orderItems');
+
+            if (cart.length === 0) {
+                checkoutContainer.style.display = 'none';
+                emptyCart.style.display = 'block';
+                return;
+            }
+
+            // Clear previous items
+            orderItems.innerHTML = '';
+
+            let subtotal = 0;
+
+            // Render order items
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (!product) return;
+
+                const itemTotal = product.price * item.quantity;
+                subtotal += itemTotal;
+
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <div class="order-item-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-name">${product.name}</div>
+                        <div class="order-item-quantity">Quantidade: ${item.quantity}</div>
+                        <div class="order-item-price">R$ ${formatPrice(itemTotal)}</div>
+                    </div>
+                `;
+                orderItems.appendChild(orderItem);
+            });
+
+            // Update summary
+            const shipping = 0; // Free shipping for pickup
+            const total = subtotal + shipping;
+
+            document.getElementById('subtotal').textContent = `R$ ${formatPrice(subtotal)}`;
+            document.getElementById('shipping').textContent = `R$ ${formatPrice(shipping)}`;
+            document.getElementById('total').textContent = `R$ ${formatPrice(total)}`;
+        }
+
+        // Setup payment options
+        function setupPaymentOptions() {
+            const paymentOnline = document.getElementById('paymentOnline');
+            const paymentPickup = document.getElementById('paymentPickup');
+            const btnPayOnline = document.getElementById('btnPayOnline');
+            const btnPickup = document.getElementById('btnPickup');
+            const paymentMethodSelector = document.getElementById('paymentMethodSelector');
+            const paymentMethodCard = document.getElementById('paymentMethodCard');
+            const paymentMethodPix = document.getElementById('paymentMethodPix');
+            const cardFormContainer = document.getElementById('cardFormContainer');
+            const pixFormContainer = document.getElementById('pixFormContainer');
+
+            paymentOnline.addEventListener('change', () => {
+                btnPayOnline.style.display = 'flex';
+                btnPickup.style.display = 'none';
+                paymentMethodSelector.style.display = 'block';
+                cardFormContainer.style.display = 'block';
+                pixFormContainer.style.display = 'none';
+            });
+
+            paymentPickup.addEventListener('change', () => {
+                btnPayOnline.style.display = 'none';
+                btnPickup.style.display = 'flex';
+                paymentMethodSelector.style.display = 'none';
+                cardFormContainer.style.display = 'none';
+                pixFormContainer.style.display = 'none';
+            });
+
+            // Payment method selector
+            paymentMethodCard.addEventListener('change', () => {
+                cardFormContainer.style.display = 'block';
+                pixFormContainer.style.display = 'none';
+            });
+
+            paymentMethodPix.addEventListener('change', () => {
+                cardFormContainer.style.display = 'none';
+                pixFormContainer.style.display = 'block';
+            });
+        }
+
+        // Copy PIX key to clipboard
+        function copyPixKey() {
+            const pixKey = document.getElementById('pixKey');
+            pixKey.select();
+            document.execCommand('copy');
+            showToast('Chave PIX copiada!', 'success');
+        }
+
+        // Pay online function
+        function payOnline() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                showToast('Carrinho vazio!', 'error');
+                return;
+            }
+
+            // Get card data
+            const cardholderName = document.getElementById('cardholderName').value;
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCVV = document.getElementById('cardCVV').value;
+
+            // Validate card data
+            if (!cardholderName || !cardNumber || !cardExpiry || !cardCVV) {
+                showToast('Preencha todos os dados do cartao!', 'error');
+                return;
+            }
+
+            if (cardNumber.length !== 16) {
+                showToast('Numero do cartao invalido!', 'error');
+                return;
+            }
+
+            // Calculate total
+            let total = 0;
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (product) total += product.price * item.quantity;
+            });
+
+            // Prepare payment data
+            const paymentData = {
+                amount: Math.round(total * 100),
+                description: `Pedido RD GAME - ${cart.length} item(ns)`,
+                payer: {
+                    name: cardholderName,
+                    email: 'cliente@rdgame.com.br'
+                },
+                card_token: null // Will be generated by Mercado Pago SDK
+            };
+
+            console.log('Payment Data:', paymentData);
+            showToast('Processando pagamento... (Mercado Pago token necessario)', 'info');
+            
+            // TODO: Send to Mercado Pago API when token is available
+            // For now, just show success message
+            setTimeout(() => {
+                showToast('Pagamento processado com sucesso!', 'success');
+                // Clear cart
+                localStorage.removeItem('cart');
+                // Redirect to success page
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 2000);
+        }
+
+        // Pickup via WhatsApp
+        function pickupWhatsApp() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                showToast('Carrinho vazio!', 'error');
+                return;
+            }
+
+            let message = '🎮 *Pedido RD GAME*\n\n';
+            message += '*Produtos:*\n';
+
+            let total = 0;
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (!product) return;
+
+                const itemTotal = product.price * item.quantity;
+                total += itemTotal;
+
+                message += `• ${product.name} x${item.quantity} - R$ ${formatPrice(itemTotal)}\n`;
+            });
+
+            message += `\n*Total: R$ ${formatPrice(total)}*\n`;
+            message += '\n📍 Quero retirar meu pedido pessoalmente na Praça XV\n';
+            message += '⏰ Sábado entre 9h e 17h\n';
+            message += '\nPor favor, confirme a disponibilidade!';
+
+            const whatsappNumber = '5521999999999'; // Replace with actual number
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+            
+            // Clear cart after sending
+            setTimeout(() => {
+                localStorage.removeItem('cart');
+                showToast('Pedido enviado! Aguarde confirmação no WhatsApp', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 500);
+        }
+    </script>
+    <!-- Mercado Pago Integration -->
+    <script src="checkout-mercado-pago.js"></script>
+    </body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuais e Posters - RDGAME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png">
+</head>
+<body>
+    <!-- Header Dinâmico -->
+    <header class="header" id="header">
+        <div class="header-wrapper">
+            <div class="container-fluid">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <a href="index.html" class="logo">
+                            <img src="logo-rdgame.png" alt="RD GAME" class="logo-image">
+                        </a>
+                    </div>
+
+                    <nav class="nav-desktop">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="consoles.html" class="nav-link">Consoles</a>
+                        <a href="jogos.html" class="nav-link">Jogos</a>
+                        <a href="acessorios.html" class="nav-link">Acessórios</a>
+                        <a href="manuais-posters.html" class="nav-link active">Manuais e Posters</a>
+                        <a href="raridades.html" class="nav-link">Raridades</a>
+                    </nav>
+
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+                            <button class="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <button class="icon-btn" id="wishlistBtn" title="Favoritos">
+                            <i class="fas fa-heart"></i>
+                            <span class="badge" id="wishlistCount">0</span>
+                        </button>
+                        <button class="icon-btn" id="cartBtn" title="Carrinho">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" id="cartCount">0</span>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <nav class="nav-mobile" id="navMobile">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="consoles.html" class="nav-link">Consoles</a>
+            <a href="jogos.html" class="nav-link">Jogos</a>
+            <a href="acessorios.html" class="nav-link">Acessórios</a>
+            <a href="manuais-posters.html" class="nav-link">Manuais e Posters</a>
+            <a href="raridades.html" class="nav-link">Raridades</a>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container-fluid">
+            <h1>Manuais e Posters</h1>
+            <p>Coleção de manuais originais e posters colecionáveis</p>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section products-section">
+        <div class="container-fluid">
+            <div class="products-container">
+                <!-- Filters Panel -->
+                <aside class="filters-panel">
+                    <div class="filter-header">
+                        <h3>Filtros</h3>
+                        <button class="btn-reset" onclick="resetFilters()">Limpar</button>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Preço</h4>
+                        <div class="price-slider">
+                            <input type="range" id="priceRange" min="0" max="5000" value="5000">
+                            <div class="price-display">
+                                <span>Até R$</span>
+                                <strong id="priceValue">5000</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Ordenar</h4>
+                        <select id="sortSelect" class="select-input">
+                            <option value="newest">Mais Recentes</option>
+                            <option value="price-asc">Menor Preço</option>
+                            <option value="price-desc">Maior Preço</option>
+                            <option value="name">Nome (A-Z)</option>
+                        </select>
+                    </div>
+                </aside>
+
+                <!-- Products Grid -->
+                <div class="products-main">
+                    <div class="products-grid" id="categoryProducts"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('productModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+               <div class="modal-image">
+    <div class="image-carousel">
+        <button class="carousel-btn carousel-prev" onclick="changeImage(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <img id="modalProductImage" src="" alt="Produto" class="carousel-main-image">
+        <button class="carousel-btn carousel-next" onclick="changeImage(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    <div class="carousel-thumbnails" id="carouselThumbnails"></div>
+</div>
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <div class="modal-rating">
+                        <div class="stars" id="modalRating"></div>
+                        <span id="modalReviews"></span>
+                    </div>
+                    <div class="modal-price">
+                        <span class="price" id="modalPrice"></span>
+                        <span class="original-price" id="modalOriginalPrice"></span>
+                    </div>
+                    <p id="modalDescription"></p>
+                    <div class="modal-stock" id="modalStock"></div>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" id="modalAddToCart">
+                            <i class="fas fa-shopping-bag"></i> Adicionar ao Carrinho
+                        </button>
+                        <button class="btn btn-secondary" id="modalAddToWishlist">
+                            <i class="fas fa-heart"></i> Adicionar aos favoritos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close" onclick="closeModal('cartModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2>Carrinho de Compras</h2>
+            </div>
+            <div class="modal-body">
+                <div class="cart-items" id="cartItems"></div>
+                <div class="cart-summary">
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">R$ 0,00</span>
+                    </div>
+                </div>
+               <button class="btn btn-primary" onclick="checkout()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="modal" id="wishlistModal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close" onclick="closeModal('wishlistModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2>Meus favoritos</h2>
+            </div>
+            <div class="modal-body">
+                <div class="wishlist-items" id="wishlistItems"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>RDGAME</h4>
+                    <p>Sua loja de games favorita com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                                             <li><a href="index.html">Home</a></li>
+<li><a href="consoles.html">Consoles</a></li>
+<li><a href="jogos.html">Jogos</a></li>
+<li><a href="acessorios.html">Acessórios</a></li>
+<li><a href="manuais-posters.html">Manuais e Posters</a></li>
+<li><a href="raridades.html">Raridades</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><a href="contato.html">Formulário de Contato</a></li>
+                        <li>Email: rd78netgamesrio@gmail.com </li>
+                        <li>Tel: (21) 98355-8012</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/rdgame78/" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@rdgame78" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RDGAME. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Inicializar página de manuais e posters
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategoryProducts('manual');
+            updateCartCount();
+            updateWishlistCount();
+            setupEventListeners();
+            setupHeaderScroll();
+        });
+
+        function renderCategoryProducts(category) {
+            const filtered = products.filter(p => p.category === category);
+            renderProductsGrid(filtered, 'categoryProducts');
+        }
+    </script>
+</body>
+</html>

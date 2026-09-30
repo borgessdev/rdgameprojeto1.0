@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - RD GAME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Checkout Specific Styles */
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .checkout-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .checkout-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkout-section h2 i {
+            color: #3b5bdb;
+        }
+
+        /* Order Summary */
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .order-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .order-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .order-item-quantity {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: #3b5bdb;
+            font-size: 1.1rem;
+        }
+
+        /* Order Summary Box */
+        .order-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 1rem;
+            border-top: 2px solid #e9ecef;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #3b5bdb;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Payment Options */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-option:hover {
+            border-color: #3b5bdb;
+            box-shadow: 0 4px 12px rgba(59, 91, 219, 0.1);
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #3b5bdb;
+        }
+
+        .payment-option-content {
+            flex: 1;
+        }
+
+        .payment-option-title {
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-option-description {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .payment-option-icon {
+            font-size: 1.5rem;
+            color: #3b5bdb;
+        }
+
+        /* Pickup Info */
+        .pickup-info {
+            background: #f0f7ff;
+            border-left: 4px solid #3b5bdb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pickup-info h3 {
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pickup-info h3 i {
+            color: #3b5bdb;
+        }
+
+        .pickup-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .pickup-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .pickup-detail i {
+            color: #3b5bdb;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .pickup-detail-content {
+            flex: 1;
+        }
+
+        .pickup-detail-label {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .pickup-detail-value {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Action Buttons */
+        .checkout-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-checkout {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-checkout:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-payment {
+            background: #3b5bdb;
+            color: white;
+        }
+
+        .btn-payment:hover:not(:disabled) {
+            background: #2d42a8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 91, 219, 0.3);
+        }
+
+        .btn-whatsapp-checkout {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp-checkout:hover:not(:disabled) {
+            background: #1fa854;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-back {
+            background: #e9ecef;
+            color: #1a1a1a;
+            margin-top: 1rem;
+        }
+
+        .btn-back:hover {
+            background: #dee2e6;
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart h2 {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-cart p {
+            color: #999;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-section {
+                padding: 1.5rem;
+            }
+
+            .order-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .order-item-image {
+                width: 100%;
+                height: 150px;
+            }
+
+            .payment-option {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .payment-option input[type="radio"] {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-wrapper">
+            <div class="container-fluid">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <a href="index.html" class="logo">
+                            <img src="logo-rdgame.png" alt="RD GAME" class="logo-image">
+                        </a>
+                    </div>
+
+                    <nav class="nav-desktop">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="consoles.html" class="nav-link">Consoles</a>
+                        <a href="jogos.html" class="nav-link">Jogos</a>
+                        <a href="acessorios.html" class="nav-link">Acessórios</a>
+                        <a href="novidades.html" class="nav-link">Novidades</a>
+                        <a href="contato.html" class="nav-link">Contato</a>
+                    </nav>
+
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+                            <button class="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <button class="icon-btn" id="wishlistBtn" title="Wishlist">
+                            <i class="fas fa-heart"></i>
+                            <span class="badge" id="wishlistCount">0</span>
+                        </button>
+                        <button class="icon-btn" id="cartBtn" title="Carrinho">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" id="cartCount">0</span>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav class="nav-mobile" id="navMobile">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="consoles.html" class="nav-link">Consoles</a>
+        <a href="jogos.html" class="nav-link">Jogos</a>
+        <a href="acessorios.html" class="nav-link">Acessórios</a>
+        <a href="novidades.html" class="nav-link">Novidades</a>
+        <a href="contato.html" class="nav-link">Contato</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <section class="section" style="padding-top: 120px;">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h2 class="section-title">Finalizar Compra</h2>
+                    <p class="section-subtitle">Revise seu pedido e escolha a forma de pagamento</p>
+                </div>
+
+                <div class="checkout-container" id="checkoutContainer">
+                    <!-- Left: Order Summary -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-shopping-cart"></i> Resumo do Pedido</h2>
+                        <div class="order-items" id="orderItems"></div>
+                        <div class="order-summary">
+                            <div class="summary-row">
+                                <span class="summary-label">Subtotal:</span>
+                                <span class="summary-value" id="subtotal">R$ 0,00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Frete:</span>
+                                <span class="summary-value" id="shipping">R$ 0,00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Total:</span>
+                                <span class="summary-value" id="total">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Payment Options -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-credit-card"></i> Forma de Pagamento</h2>
+                        
+                        <!-- Formulário WhatsApp -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <h3 style="margin-bottom: 1.5rem; color: #1a1a1a; font-weight: 600;">Dados para Contato</h3>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nome Completo *</label>
+                                <input type="text" id="whatsappName" placeholder="Seu nome" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email *</label>
+                                <input type="email" id="whatsappEmail" placeholder="seu@email.com" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Telefone *</label>
+                                <input type="tel" id="whatsappPhone" placeholder="(21) 99999-9999" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            
+                            <!-- Opções de Entrega -->
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; font-weight: 600;">Tipo de Entrega *</label>
+                                
+                                <label style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer;">
+                                    <input type="radio" name="deliveryType" value="delivery" checked onchange="toggleDeliveryFields()" style="cursor: pointer;">
+                                    <span>🚚 Entrega em Domicílio</span>
+                                </label>
+                                
+                                <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                    <input type="radio" name="deliveryType" value="pickup" onchange="toggleDeliveryFields()" style="cursor: pointer;">
+                                    <span>📍 Retirar na Praça XV</span>
+                                </label>
+                            </div>
+                            
+                            <!-- Campo de Endereço (Entrega) -->
+                            <div id="deliveryAddressField" style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Endereço de Entrega *</label>
+                                <input type="text" id="whatsappAddress" placeholder="Rua, número, complemento" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            
+                            <!-- Campo de Horário (Retirada) -->
+                            <div id="pickupTimeField" style="margin-bottom: 1rem; display: none;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Horário de Retirada *</label>
+                                <select id="pickupTime" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    <option value="">Selecione um horário</option>
+                                    <option value="9h - 10h">9h - 10h</option>
+                                    <option value="10h - 11h">10h - 11h</option>
+                                    <option value="11h - 12h">11h - 12h</option>
+                                    <option value="12h - 13h">12h - 13h</option>
+                                    <option value="13h - 14h">13h - 14h</option>
+                                    <option value="14h - 15h">14h - 15h</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Observações</label>
+                                <textarea id="whatsappObservations" placeholder="Deixe suas observações aqui..." style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; min-height: 80px; resize: vertical;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Info -->
+                        <div class="pickup-info">
+                            <h3><i class="fas fa-map-marker-alt"></i> Local de Retirada</h3>
+                            <div class="pickup-detail">
+                                <i class="fas fa-location-dot"></i>
+                                <div class="pickup-detail-content">
+                                    <div class="pickup-detail-label">Endereço</div>
+                                    <div class="pickup-detail-value">Praça Quinze de Novembro<br>Rio de Janeiro, RJ - 20010-010</div>
+                                </div>
+                            </div>
+                            <div class="pickup-detail">
+                                <i class="fas fa-clock"></i>
+                                <div class="pickup-detail-content">
+                                    <div class="pickup-detail-label">Horário</div>
+                                    <div class="pickup-detail-value">Sábado: 9h às 15h</div>
+                                </div>
+                            </div>
+                            <div class="pickup-detail">
+                                <i class="fas fa-info-circle"></i>
+                                <div class="pickup-detail-content">
+                                    <div class="pickup-detail-label">Observação</div>
+                                    <div class="pickup-detail-value">Confirme sua retirada por WhatsApp</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="checkout-actions">
+                            <button class="btn-checkout btn-whatsapp-checkout" id="btnWhatsappCheckout" onclick="sendToWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> Enviar Pedido via WhatsApp
+                            </button>
+                            <a href="index.html" class="btn-checkout btn-back">
+                                <i class="fas fa-arrow-left"></i> Continuar Comprando
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Cart Message -->
+                <div class="empty-cart" id="emptyCart" style="display: none;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Carrinho Vazio</h2>
+                    <p>Adicione produtos ao seu carrinho para continuar</p>
+                    <a href="index.html" class="btn btn-primary">Voltar para Produtos</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>RDGAME</h4>
+                    <p>O melhor em produtos para gamers apaixonados</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/rdgame78/" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@rdgame78" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="consoles.html">Consoles</a></li>
+                        <li><a href="jogos.html">Jogos</a></li>
+                        <li><a href="acessorios.html">Acessórios</a></li>
+                        <li><a href="novidades.html">Novidades</a></li>
+                        <li><a href="contato.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <p>Email: rd78netgamesrio@gmail.com</p>
+                    <p>Telefone: (21) 98355-8012</p>
+                    <p>Rio de Janeiro, RJ</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Atendimento</h4>
+                    <p>Segunda a Sexta: 9h às 18h</p>
+                    <p>Sábado: 9h às 15h</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RDGAME. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/55" class="whatsapp-btn" target="_blank" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Meu Carrinho</h2>
+                <button class="btn-close" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="cartItems"></div>
+            <div class="modal-footer">
+                <div class="cart-total">
+                    Subtotal: <strong id="subtotal">R$ 0,00</strong><br>
+                    Frete: <strong id="shipping">R$ 0,00</strong><br>
+                    Total: <strong id="total">R$ 0,00</strong>
+                </div>
+                <button class="btn btn-primary" onclick="checkout()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="modal" id="wishlistModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Meus Favoritos</h2>
+                <button class="btn-close" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="wishlistItems"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pequeno delay para garantir que script.js foi carregado
+            setTimeout(() => {
+                setupHeaderScroll();
+                updateCartCount();
+                updateWishlistCount();
+                renderCheckout();
+                setupPaymentOptions();
+            }, 100);
+        });
+
+        // Render checkout page
+        function renderCheckout() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const checkoutContainer = document.getElementById('checkoutContainer');
+            const emptyCart = document.getElementById('emptyCart');
+            const orderItems = document.getElementById('orderItems');
+
+            if (cart.length === 0) {
+                checkoutContainer.style.display = 'none';
+                emptyCart.style.display = 'block';
+                return;
+            }
+
+            // Clear previous items
+            orderItems.innerHTML = '';
+
+            let subtotal = 0;
+
+            // Render order items
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (!product) return;
+
+                const itemTotal = product.price * item.quantity;
+                subtotal += itemTotal;
+
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <div class="order-item-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-name">${product.name}</div>
+                        <div class="order-item-quantity">Quantidade: ${item.quantity}</div>
+                        <div class="order-item-price">R$ ${formatPrice(itemTotal)}</div>
+                    </div>
+                    <button class="remove-item-btn" onclick="removeItemFromCheckout(${item.id})" style="background: #ff4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">Remover</button>
+                `;
+                orderItems.appendChild(orderItem);
+            });
+
+            // Update summary
+            const shipping = 0; // Free shipping for pickup
+            const total = subtotal + shipping;
+
+            document.getElementById('subtotal').textContent = `R$ ${formatPrice(subtotal)}`;
+            document.getElementById('shipping').textContent = `R$ ${formatPrice(shipping)}`;
+            document.getElementById('total').textContent = `R$ ${formatPrice(total)}`;
+        }
+
+        // Setup payment options
+        function setupPaymentOptions() {
+            const paymentOnline = document.getElementById('paymentOnline');
+            const paymentPickup = document.getElementById('paymentPickup');
+            const btnPayOnline = document.getElementById('btnPayOnline');
+            const btnPickup = document.getElementById('btnPickup');
+            const paymentMethodSelector = document.getElementById('paymentMethodSelector');
+            const paymentMethodCard = document.getElementById('paymentMethodCard');
+            const paymentMethodPix = document.getElementById('paymentMethodPix');
+            const cardFormContainer = document.getElementById('cardFormContainer');
+            const pixFormContainer = document.getElementById('pixFormContainer');
+
+            paymentOnline.addEventListener('change', () => {
+                btnPayOnline.style.display = 'flex';
+                btnPickup.style.display = 'none';
+                paymentMethodSelector.style.display = 'block';
+                cardFormContainer.style.display = 'block';
+                pixFormContainer.style.display = 'none';
+            });
+
+            paymentPickup.addEventListener('change', () => {
+                btnPayOnline.style.display = 'none';
+                btnPickup.style.display = 'flex';
+                paymentMethodSelector.style.display = 'none';
+                cardFormContainer.style.display = 'none';
+                pixFormContainer.style.display = 'none';
+            });
+
+            // Payment method selector
+            paymentMethodCard.addEventListener('change', () => {
+                cardFormContainer.style.display = 'block';
+                pixFormContainer.style.display = 'none';
+            });
+
+            paymentMethodPix.addEventListener('change', () => {
+                cardFormContainer.style.display = 'none';
+                pixFormContainer.style.display = 'block';
+            });
+        }
+
+        // Copy PIX key to clipboard
+        function copyPixKey() {
+            const pixKey = document.getElementById('pixKey');
+            pixKey.select();
+            document.execCommand('copy');
+            showToast('Chave PIX copiada!', 'success');
+        }
+
+        // Pay online function
+        function payOnline() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                showToast('Carrinho vazio!', 'error');
+                return;
+            }
+
+            // Get card data
+            const cardholderName = document.getElementById('cardholderName').value;
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCVV = document.getElementById('cardCVV').value;
+
+            // Validate card data
+            if (!cardholderName || !cardNumber || !cardExpiry || !cardCVV) {
+                showToast('Preencha todos os dados do cartao!', 'error');
+                return;
+            }
+
+            if (cardNumber.length !== 16) {
+                showToast('Numero do cartao invalido!', 'error');
+                return;
+            }
+
+            // Calculate total
+            let total = 0;
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (product) total += product.price * item.quantity;
+            });
+
+            // Prepare payment data
+            const paymentData = {
+                amount: Math.round(total * 100),
+                description: `Pedido RD GAME - ${cart.length} item(ns)`,
+                payer: {
+                    name: cardholderName,
+                    email: 'cliente@rdgame.com.br'
+                },
+                card_token: null // Will be generated by Mercado Pago SDK
+            };
+
+            console.log('Payment Data:', paymentData);
+            showToast('Processando pagamento... (Mercado Pago token necessario)', 'info');
+            
+            // TODO: Send to Mercado Pago API when token is available
+            // For now, just show success message
+            setTimeout(() => {
+                showToast('Pagamento processado com sucesso!', 'success');
+                // Clear cart
+                localStorage.removeItem('cart');
+                // Redirect to success page
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 2000);
+        }
+
+        // Remove item from checkout
+        function removeItemFromCheckout(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCheckout();
+        }
+
+                // Toggle delivery fields
+        function toggleDeliveryFields() {
+            const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+            const deliveryAddressField = document.getElementById('deliveryAddressField');
+            const pickupTimeField = document.getElementById('pickupTimeField');
+            
+            if (deliveryType === 'delivery') {
+                deliveryAddressField.style.display = 'block';
+                pickupTimeField.style.display = 'none';
+            } else {
+                deliveryAddressField.style.display = 'none';
+                pickupTimeField.style.display = 'block';
+            }
+        }
+
+                // Send to WhatsApp
+        function sendToWhatsApp() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                showToast('Carrinho vazio!', 'error');
+                return;
+            }
+
+            // Get form data
+            const name = document.getElementById('whatsappName').value;
+            const email = document.getElementById('whatsappEmail').value;
+            const phone = document.getElementById('whatsappPhone').value;
+            const address = document.getElementById('whatsappAddress').value;
+            const observations = document.getElementById('whatsappObservations').value;
+            const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+            const pickupTime = deliveryType === 'pickup' ? document.getElementById('pickupTime').value : null;
+
+            // Validate
+            if (!name || !email || !phone) {
+                showToast('Preencha todos os dados obrigatórios!', 'error');
+                return;
+            }
+
+            if (deliveryType === 'delivery' && !address) {
+                showToast('Preencha o endereço para entrega!', 'error');
+                return;
+            }
+
+            if (deliveryType === 'pickup' && !pickupTime) {
+                showToast('Selecione um horário de retirada!', 'error');
+                return;
+            }
+
+            // Build message
+            let message = '🎮 *PEDIDO RD GAME*\n\n';
+            message += `*Cliente:* ${name}\n`;
+            message += `*Email:* ${email}\n`;
+            message += `*Telefone:* ${phone}\n\n`;
+            message += '*Produtos:*\n';
+
+            let total = 0;
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (!product) return;
+
+                const itemTotal = product.price * item.quantity;
+                total += itemTotal;
+
+                message += `• ${product.name}\n`;
+                message += `  Quantidade: ${item.quantity}\n`;
+                message += `  Preço unitário: R$ ${formatPrice(product.price)}\n`;
+                message += `  Subtotal: R$ ${formatPrice(itemTotal)}\n\n`;
+            });
+
+            message += `*TOTAL: R$ ${formatPrice(total)}*\n\n`;
+            
+            if (deliveryType === 'delivery') {
+                message += `*Tipo de Entrega:* Entrega em domicílio\n`;
+                message += `*Endereço:* ${address}\n\n`;
+            } else {
+                message += `*Tipo de Entrega:* Retirada na Praça XV\n`;
+                message += `*Horário:* ${pickupTime}\n`;
+                message += `*Local:* Praça Quinze de Novembro, Rio de Janeiro - RJ\n\n`;
+            }
+            
+            if (observations) {
+                message += `*Observações:* ${observations}\n\n`;
+            }
+
+            message += 'Por favor, confirme meu pedido!';
+
+            const whatsappNumber = '5521983558012';
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+            
+            // Save order to admin panel
+            const orderData = {
+                name: name,
+                email: email,
+                phone: phone,
+                address: address,
+                observations: observations,
+                deliveryType: deliveryType,
+                pickupTime: deliveryType === 'pickup' ? pickupTime : null,
+                items: cart.map(item => {
+                    const product = products.find(p => p.id === item.id);
+                    return {
+                        id: item.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: item.quantity
+                    };
+                }),
+                subtotal: total,
+                shipping: 0,
+                total: total,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+
+            // Save to localStorage
+            const orders = JSON.parse(localStorage.getItem('rdgame_orders')) || [];
+            orders.push(orderData);
+            localStorage.setItem('rdgame_orders', JSON.stringify(orders));
+
+            // Clear cart after sending
+            setTimeout(() => {
+                localStorage.removeItem('cart');
+                localStorage.removeItem('cartCount');
+                showToast('Pedido enviado! Redirecionando...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 500);
+        }
+
+        // Pickup via WhatsApp
+        function pickupWhatsApp() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                showToast('Carrinho vazio!', 'error');
+                return;
+            }
+
+            let message = '🎮 *Pedido RD GAME*\n\n';
+            message += '*Produtos:*\n';
+
+            let total = 0;
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (!product) return;
+
+                const itemTotal = product.price * item.quantity;
+                total += itemTotal;
+
+                message += `• ${product.name} x${item.quantity} - R$ ${formatPrice(itemTotal)}\n`;
+            });
+
+            message += `\n*Total: R$ ${formatPrice(total)}*\n`;
+            message += '\n📍 Quero retirar meu pedido pessoalmente na Praça XV\n';
+            message += '⏰ Sábado entre 9h e 17h\n';
+            message += '\nPor favor, confirme a disponibilidade!';
+
+            const whatsappNumber = '5521999999999'; // Replace with actual number
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+            
+            // Clear cart after sending
+            setTimeout(() => {
+                localStorage.removeItem('cart');
+                showToast('Pedido enviado! Aguarde confirmação no WhatsApp', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 500);
+        }
+    </script>
+</body>
+</html>

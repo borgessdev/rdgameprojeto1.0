@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - RDGAME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png">
+</head>
+<body>
+    <!-- Header Dinâmico -->
+    <header class="header" id="header">
+        <div class="header-wrapper">
+            <div class="container-fluid">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <a href="index.html" class="logo">
+                            <img src="logo-rdgame.png" alt="RD GAME" class="logo-image">
+                        </a>
+                    </div>
+
+                    <nav class="nav-desktop">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="consoles.html" class="nav-link">Consoles</a>
+                        <a href="jogos.html" class="nav-link">Jogos</a>
+                        <a href="acessorios.html" class="nav-link">Acessórios</a>
+                        <a href="novidades.html" class="nav-link">Novidades</a>
+                        <a href="contato.html" class="nav-link active">Contato</a>
+                    </nav>
+
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+                            <button class="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <button class="icon-btn" id="wishlistBtn" title="Wishlist">
+                            <i class="fas fa-heart"></i>
+                            <span class="badge" id="wishlistCount">0</span>
+                        </button>
+                        <button class="icon-btn" id="cartBtn" title="Carrinho">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" id="cartCount">0</span>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Contact Section -->
+        <section class="section contact-section" style="padding-top: 120px;">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h2>Entre em Contato</h2>
+                    <p>Estamos aqui para ajudar! Envie sua mensagem e responderemos o mais rápido possível.</p>
+                </div>
+
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Localização</h3>
+                                <p>Rio de Janeiro</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Telefone</h3>
+                                <p>(21) 98355-8012</p>
+                                <p>(21) 98113-3065</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Email</h3>
+                                <p>rd78netgamesrio@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-content">
+                                <h3>Horário de Atendimento</h3>
+                                <p>Segunda a Sexta: 9h às 18h</p>
+                                <p>Sábado: 9h às 15h</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-container">
+                        <form class="contact-form" id="contactForm" onsubmit="sendContactViaWhatsApp(event)">
+                            <div class="form-group">
+                                <label for="contactName">Nome Completo</label>
+                                <input type="text" id="contactName" name="name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactPhone">Telefone</label>
+                                <input type="tel" id="contactPhone" name="phone">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactSubject">Assunto</label>
+                                <select id="contactSubject" name="subject" required>
+                                    <option value="">Selecione um assunto</option>
+                                    <option value="Vender Produtos">Vender Produtos</option>
+                                    <option value="Dúvida sobre Compra">Dúvida sobre Compra</option>
+                                    <option value="Suporte Técnico">Suporte Técnico</option>
+                                    <option value="Parceria">Parceria</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactMessage">Mensagem</label>
+                                <textarea id="contactMessage" name="message" rows="5" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg">Enviar Mensagem</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>RDGAME</h4>
+                    <p>O melhor em produtos para gamers apaixonados</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/rdgame78/" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@rdgame78" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="consoles.html">Consoles</a></li>
+                        <li><a href="jogos.html">Jogos</a></li>
+                        <li><a href="acessorios.html">Acessórios</a></li>
+                        <li><a href="novidades.html">Novidades</a></li>
+                        <li><a href="contato.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <p>Email: rd78netgamesrio@gmail.com</p>
+                    <p>Telefone: (21) 98355-8012</p>
+                    <p>Rio de Janeiro - RJ</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Atendimento</h4>
+                    <p>Segunda a Sexta: 9h às 18h</p>
+                    <p>Sábado: 9h às 15h</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RDGAME. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/5521983558012" class="whatsapp-btn" target="_blank" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+ <!-- Toast Notification -->
+<div class="toast" id="toast">
+    <span id="toastMessage"></span>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Meu Carrinho</h2>
+            <button class="btn-close" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="cartItems"></div>
+        <div class="modal-footer">
+            <div class="cart-total">
+                Total: <strong id="total">R$ 0,00</strong>
+            </div>
+            <button class="btn btn-primary" onclick="checkout()">Finalizar Compra</button>
+        </div>
+    </div>
+</div>
+
+<!-- Wishlist Modal -->
+<div class="modal" id="wishlistModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Meus Favoritos</h2>
+            <button class="btn-close" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="wishlistItems"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+
+    <script src="script.js"></script>
+    <script>
+        // Setup header scroll for contact page
+        setupHeaderScroll();
+        updateCartCount();
+        updateWishlistCount();
+    
+    </script>
+</body>
+</html>

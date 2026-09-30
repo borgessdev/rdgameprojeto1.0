@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - RD GAME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .admin-header h1 {
+            font-size: 2rem;
+            color: #1a1a1a;
+        }
+
+        .logout-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #cc0000;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .orders-table thead {
+            background: #0066cc;
+            color: white;
+        }
+
+        .orders-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .orders-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .orders-table tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-shipped {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-delivered {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .btn-view {
+            background: #0066cc;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #0052a3;
+        }
+
+        .btn-status {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-status:hover {
+            background: #218838;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .order-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .order-details h3 {
+            font-size: 1rem;
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .order-details p {
+            margin: 0.25rem 0;
+            color: #333;
+        }
+
+        .status-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-update-status {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .btn-update-status:hover {
+            background: #218838;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-message i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-form h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .login-form button:hover {
+            background: #0052a3;
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-form">
+            <h1>🎮 Admin RD GAME</h1>
+            <div id="loginError" class="error-message" style="display: none;"></div>
+            <input type="password" id="adminPassword" placeholder="Senha do Admin" onkeypress="if(event.key==='Enter') adminLogin()">
+            <button onclick="adminLogin()">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>📋 Gerenciador de Pedidos</h1>
+                <button class="logout-btn" onclick="adminLogout()">Sair</button>
+            </div>
+
+            <div id="ordersContainer">
+                <div class="empty-message">
+                    <i class="fas fa-inbox"></i>
+                    <p>Nenhum pedido ainda</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalhes do Pedido</h2>
+                <button class="close-btn" onclick="closeOrderModal()">×</button>
+            </div>
+            <div id="orderDetailsContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const ADMIN_PASSWORD = 'admin123'; // Senha padrão - MUDE ISSO!
+        const ORDERS_KEY = 'rdgame_orders';
+
+        // Check if admin is logged in
+        function checkAdminLogin() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+            const loginContainer = document.getElementById('loginContainer');
+            const adminPanel = document.getElementById('adminPanel');
+
+            if (isLoggedIn) {
+                loginContainer.style.display = 'none';
+                adminPanel.style.display = 'block';
+                loadOrders();
+            } else {
+                loginContainer.style.display = 'flex';
+                adminPanel.style.display = 'none';
+            }
+        }
+
+        // Admin login
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (password === ADMIN_PASSWORD) {
+                localStorage.setItem('adminLoggedIn', 'true');
+                errorDiv.style.display = 'none';
+                checkAdminLogin();
+            } else {
+                errorDiv.textContent = 'Senha incorreta!';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Admin logout
+        function adminLogout() {
+            localStorage.removeItem('adminLoggedIn');
+            document.getElementById('adminPassword').value = '';
+            checkAdminLogin();
+        }
+
+        // Load orders from localStorage
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+            const container = document.getElementById('ordersContainer');
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-message">
+                        <i class="fas fa-inbox"></i>
+                        <p>Nenhum pedido ainda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            orders.forEach((order, index) => {
+                const statusClass = `status-${order.status || 'pending'}`;
+                const statusText = getStatusText(order.status || 'pending');
+                const date = new Date(order.date).toLocaleDateString('pt-BR');
+
+                html += `
+                    <tr>
+                        <td>#${String(index + 1).padStart(4, '0')}</td>
+                        <td>${order.name}</td>
+                        <td>R$ ${formatPrice(order.total)}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${date}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-small btn-view" onclick="viewOrderDetails(${index})">Ver</button>
+                                <button class="btn-small btn-status" onclick="openStatusModal(${index})">Mudar Status</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Pendente',
+                'confirmed': 'Confirmado',
+                'shipped': 'Enviado',
+                'delivered': 'Entregue'
+            };
+            return statusMap[status] || 'Pendente';
+        }
+
+        // View order details
+        function viewOrderDetails(index) {
+            const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+            const order = orders[index];
+
+            if (!order) return;
+
+            let html = `
+                <div class="order-details">
+                    <h3>📌 Informações do Cliente</h3>
+                    <p><strong>Nome:</strong> ${order.name}</p>
+                    <p><strong>Email:</strong> ${order.email}</p>
+                    <p><strong>Telefone:</strong> ${order.phone}</p>
+                    <p><strong>Tipo de Entrega:</strong> ${order.deliveryType === 'delivery' ? 'Entrega em Domicílio' : 'Retirada na Praça XV'}</p>
+                    ${order.deliveryType === 'delivery' ? `<p><strong>Endereço:</strong> ${order.address}</p>` : `<p><strong>Horário:</strong> ${order.pickupTime}</p>`}
+                    ${order.observations ? `<p><strong>Observações:</strong> ${order.observations}</p>` : ''}
+                </div>
+
+                <div class="order-details">
+                    <h3>🛍️ Produtos</h3>
+                    ${order.items.map(item => `
+                        <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f5f5f5; border-radius: 6px;">
+                            <p><strong>${item.name}</strong></p>
+                            <p>Quantidade: ${item.quantity}</p>
+                            <p>Preço Unitário: R$ ${formatPrice(item.price)}</p>
+                            <p><strong>Subtotal: R$ ${formatPrice(item.price * item.quantity)}</strong></p>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="order-details">
+                    <h3>💰 Resumo</h3>
+                    <p><strong>Subtotal:</strong> R$ ${formatPrice(order.subtotal)}</p>
+                    <p><strong>Frete:</strong> R$ ${formatPrice(order.shipping || 0)}</p>
+                    <p style="font-size: 1.1rem; color: #0066cc;"><strong>Total: R$ ${formatPrice(order.total)}</strong></p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${order.status || 'pending'}">${getStatusText(order.status || 'pending')}</span></p>
+                    <p><strong>Data do Pedido:</strong> ${new Date(order.date).toLocaleString('pt-BR')}</p>
+                </div>
+            `;
+
+            document.getElementById('orderDetailsContent').innerHTML = html;
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        // Open status modal
+        function openStatusModal(index) {
+            const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+            const order = orders[index];
+
+            if (!order) return;
+
+            let html = `
+                <div class="order-details">
+                    <h3>Mudar Status do Pedido</h3>
+                    <p><strong>Cliente:</strong> ${order.name}</p>
+                    <p><strong>Status Atual:</strong> <span class="status-badge status-${order.status || 'pending'}">${getStatusText(order.status || 'pending')}</span></p>
+                </div>
+
+                <select class="status-select" id="newStatus">
+                    <option value="pending">Pendente</option>
+                    <option value="confirmed">Confirmado</option>
+                    <option value="shipped">Enviado</option>
+                    <option value="delivered">Entregue</option>
+                </select>
+
+                <button class="btn-update-status" onclick="updateOrderStatus(${index})">Atualizar Status</button>
+            `;
+
+            document.getElementById('orderDetailsContent').innerHTML = html;
+            document.getElementById('orderModal').classList.add('active');
+
+            // Set current status
+            document.getElementById('newStatus').value = order.status || 'pending';
+        }
+
+        // Update order status
+        function updateOrderStatus(index) {
+            const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+            const newStatus = document.getElementById('newStatus').value;
+
+            if (orders[index]) {
+                orders[index].status = newStatus;
+                localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+                closeOrderModal();
+                loadOrders();
+                alert('Status atualizado com sucesso!');
+            }
+        }
+
+        // Close order modal
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        // Save order to localStorage
+        function saveOrder(orderData) {
+            const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+            orders.push({
+                ...orderData,
+                date: new Date().toISOString(),
+                status: 'pending'
+            });
+            localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+        }
+
+        // Initialize
+        checkAdminLogin();
+    </script>
+</body>
+</html>
